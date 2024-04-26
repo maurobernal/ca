@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>ca.Application</RootNamespace>
+    <AssemblyName>ca.Application</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Ardalis.GuardClauses" />
+    <PackageReference Include="AutoMapper" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="CQRS\Skills\Commands\DeleteSkillComand\" />
+    <Folder Include="CQRS\Skills\Commands\UpdateSkillComand\" />
+    <Folder Include="CQRS\Skills\Queries\GetSkillQueries\" />
+    <Folder Include="CQRS\Skills\Queries\GetListSkillsQueries\" />
+    <Folder Include="CQRS\Students\Queries\GetStudentsQueries\" />
+  </ItemGroup>
+
+</Project>
