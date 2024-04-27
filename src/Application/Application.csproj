@@ -17,10 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="CQRS\Skills\Commands\DeleteSkillComand\" />
-    <Folder Include="CQRS\Skills\Commands\UpdateSkillComand\" />
-    <Folder Include="CQRS\Skills\Queries\GetSkillQueries\" />
-    <Folder Include="CQRS\Skills\Queries\GetListSkillsQueries\" />
     <Folder Include="CQRS\Students\Queries\GetStudentsQueries\" />
   </ItemGroup>
 
