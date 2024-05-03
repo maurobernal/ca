@@ -3,6 +3,6 @@ public class Course : BaseAuditableEntity
 {
     public string Title { get; set; } = string.Empty;
 
-    public virtual IList<Student> StudentsCourses { get; set; } = new List<Student>();
+    public virtual IList<Student> Students { get; set; } = new List<Student>();
 
 }
