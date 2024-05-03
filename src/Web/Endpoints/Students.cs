@@ -1,4 +1,5 @@
 ﻿using ca.Application.CQRS.Students.Commands.CreateStudentCommand;
+using ca.Application.CQRS.Students.Commands.DeleteStudentCommand;
 using ca.Application.CQRS.Students.Commands.PutStudentCommand;
 using ca.Application.CQRS.Students.Queries.GetStudentQueries;
 using ca.Application.CQRS.TodoItems.Commands.CreateTodoItem;
@@ -9,7 +10,14 @@ namespace ca.Web.Endpoints;
 public class Students : EndpointGroupBase
 {
 
-
+    public override void Map(WebApplication app)
+    {
+        app.MapGroup(this)
+            .MapGet(GetStudent)
+            .MapPost(PostStudent)
+            .MapPut(PutStudent, "{id}")
+            .MapDelete(DeleteStudent, "{id}");
+    }
 
 
     [AllowAnonymous]
@@ -32,11 +40,13 @@ public class Students : EndpointGroupBase
         return Results.Ok(await sender.Send(command));
     }
 
-    public override void Map(WebApplication app)
+    [AllowAnonymous]
+    public async Task<IResult> DeleteStudent(ISender sender, int id)
     {
-        app.MapGroup(this)
-            .MapGet(GetStudent)
-            .MapPost(PostStudent)
-            .MapPut(PutStudent,"{id}");
+        var command = new DeleteStudentCommand();
+        command.AssignId(id);
+        return Results.Ok(await sender.Send(command));
     }
+
+
 }
