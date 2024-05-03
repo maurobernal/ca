@@ -1,7 +1,9 @@
-﻿using ca.Application.CQRS.Students.Commands.CreateStudentCommand;
+﻿using ca.Application.Common.Models;
+using ca.Application.CQRS.Students.Commands.CreateStudentCommand;
 using ca.Application.CQRS.Students.Commands.DeleteStudentCommand;
 using ca.Application.CQRS.Students.Commands.PutStudentCommand;
 using ca.Application.CQRS.Students.Queries.GetStudentQueries;
+using ca.Application.CQRS.Students.Queries.GetStudentsQueries;
 using ca.Application.CQRS.TodoItems.Commands.CreateTodoItem;
 using Microsoft.AspNetCore.Authorization;
 
@@ -13,7 +15,8 @@ public class Students : EndpointGroupBase
     public override void Map(WebApplication app)
     {
         app.MapGroup(this)
-            .MapGet(GetStudent)
+            .MapGet(GetStudent,"{id}")
+            .MapGet(GetListStudent)
             .MapPost(PostStudent)
             .MapPut(PutStudent, "{id}")
             .MapDelete(DeleteStudent, "{id}");
@@ -21,9 +24,18 @@ public class Students : EndpointGroupBase
 
 
     [AllowAnonymous]
-    public Task<GetStudentDto> GetStudent(ISender sender, [AsParameters] GetStudentQueries query)
+    public Task<GetStudentDto> GetStudent(ISender sender, int id)
     {
+        var query = new GetStudentQueries();
+        query.id = id;
         return sender.Send(query);
+    }
+
+    [AllowAnonymous]
+    public async Task<PaginatedList<GetStudentDtoOfList>> GetListStudent(ISender sender, [AsParameters] GetListStudentsQueries query )
+    {        
+        var res =  await sender.Send(query);
+        return res;
     }
 
 
