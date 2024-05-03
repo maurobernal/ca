@@ -2,15 +2,20 @@
 
 namespace ca.Application.Common.Exceptions;
 
-public class ValidationException : Exception
+public class ApiValidationException : Exception
 {
-    public ValidationException()
+    public ApiValidationException()
         : base("One or more validation failures have occurred.")
     {
         Errors = new Dictionary<string, string[]>();
     }
 
-    public ValidationException(IEnumerable<ValidationFailure> failures)
+    public ApiValidationException(string error)
+        : base("One or more validation failures have occurred.")
+    {
+        Errors = new Dictionary<string, string[]>();   
+    }
+    public ApiValidationException(IEnumerable<ValidationFailure> failures)
         : this()
     {
         Errors = failures

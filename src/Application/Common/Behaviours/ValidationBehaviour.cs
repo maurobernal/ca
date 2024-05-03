@@ -1,4 +1,4 @@
-﻿using ValidationException = ca.Application.Common.Exceptions.ValidationException;
+﻿using ValidationException = ca.Application.Common.Exceptions.ApiValidationException;
 
 namespace ca.Application.Common.Behaviours;
 

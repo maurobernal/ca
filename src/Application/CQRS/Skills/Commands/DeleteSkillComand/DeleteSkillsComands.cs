@@ -20,7 +20,7 @@ public class DeleteSkillsHandler : IRequestHandler<DeleteSkillsComands, int>
         var ent= await _context.Skills.AsNoTracking()
             .FirstOrDefaultAsync(f => f.Id == request.Id);
 
-        if (ent == null) throw new Common.Exceptions.NotFoundException($"La entidad no existe. Id:{request.Id}");
+        if (ent == null) throw new Common.Exceptions.ApiNotFoundException($"La entidad no existe. Id:{request.Id}");
 
         var res= _context.Skills.Remove(ent);
         await _context.SaveChangesAsync(cancellationToken);

@@ -25,7 +25,7 @@ public class UpdateSkillHandler : IRequestHandler<UpdateSkillComands, int>
     public async Task<int> Handle(UpdateSkillComands request, CancellationToken cancellationToken)
     {      
         var entity =  await _context.Skills.FirstOrDefaultAsync(s => s.Id == request.Id);
-        if (entity == null) throw new Common.Exceptions.NotFoundException($"No existe el registro {request.Id}");
+        if (entity == null) throw new Common.Exceptions.ApiNotFoundException($"No existe el registro {request.Id}");
 
         entity.Title = request.Title;
         await _context.SaveChangesAsync(cancellationToken);
