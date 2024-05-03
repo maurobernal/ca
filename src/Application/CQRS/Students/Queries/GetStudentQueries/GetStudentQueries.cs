@@ -10,25 +10,19 @@ public class GetStudentQueries : IRequest<GetStudentDto>
 }
 
 
-public class GetStudentQueriesHandler : IRequestHandler<GetStudentQueries, GetStudentDto>
+public class GetStudentQueriesHandler(IApplicationDbContext _context, IMapper _mapper) : IRequestHandler<GetStudentQueries, GetStudentDto>
 {
-    private readonly IApplicationDbContext _context;
-    private readonly IMapper _mapper;
-    public GetStudentQueriesHandler(IApplicationDbContext context, IMapper mapper)
-    {
-        _context = context;
-        _mapper = mapper;
-    }
     public async Task<GetStudentDto> Handle(GetStudentQueries request, CancellationToken cancellationToken)
     {
-        var student2 = await _context.Students.AsNoTracking()
-           .SingleOrDefaultAsync(s => s.Id == request.id);
+        var entity = await _context.Students
+            .AsNoTracking()
+            .Include(c => c.Courses)
+            .ProjectTo<GetStudentDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync(r => r.Id == request.id);
+        
+        if (entity == null) throw new ApiNotFoundException($"el registro no existe:{request.id}");
 
-        int studentId = 0;
-        if (student2 != null) studentId = student2.Id;
-
-
-        return new GetStudentDto();
+        return entity;
 
     }
 }
