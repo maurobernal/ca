@@ -31,7 +31,7 @@ public class PurgeTodoListsTests : BaseTestFixture
 
         var action = () => SendAsync(command);
 
-        await action.Should().ThrowAsync<ForbiddenAccessException>();
+        await action.Should().ThrowAsync<ApiForbiddenAccessException>();
     }
 
     [Test]
@@ -43,7 +43,7 @@ public class PurgeTodoListsTests : BaseTestFixture
 
         var action = () => SendAsync(command);
 
-        await action.Should().NotThrowAsync<ForbiddenAccessException>();
+        await action.Should().NotThrowAsync<ApiForbiddenAccessException>();
     }
 
     [Test]

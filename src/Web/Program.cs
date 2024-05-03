@@ -14,13 +14,19 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    await app.InitialiseDatabaseAsync();
+    await app.ApplyMigrations();
 }
 else
 {
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+if(bool.Parse(builder?.Configuration["Settings:ApplyMigrations"]?? "false"))
+    await app.ApplyMigrations();
+
+if (bool.Parse(builder?.Configuration["Settings:ApplySeeds"] ?? "false"))
+    await app.LoadSeeds();
+
 
 app.UseHealthChecks("/health");
 app.UseHttpsRedirection();

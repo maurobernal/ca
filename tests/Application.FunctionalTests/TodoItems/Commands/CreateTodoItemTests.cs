@@ -15,7 +15,7 @@ public class CreateTodoItemTests : BaseTestFixture
         var command = new CreateTodoItemCommand();
 
         await FluentActions.Invoking(() =>
-            SendAsync(command)).Should().ThrowAsync<ValidationException>();
+            SendAsync(command)).Should().ThrowAsync<ApiValidationException>();
     }
 
     [Test]

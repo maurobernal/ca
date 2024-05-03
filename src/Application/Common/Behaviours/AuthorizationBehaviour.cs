@@ -53,7 +53,7 @@ public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRe
                 // Must be a member of at least one role in roles
                 if (!authorized)
                 {
-                    throw new ForbiddenAccessException();
+                    throw new ApiForbiddenAccessException();
                 }
             }
 
@@ -67,7 +67,7 @@ public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRe
 
                     if (!authorized)
                     {
-                        throw new ForbiddenAccessException();
+                        throw new ApiForbiddenAccessException();
                     }
                 }
             }

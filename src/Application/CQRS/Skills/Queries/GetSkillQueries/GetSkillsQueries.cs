@@ -21,7 +21,7 @@ public class GetSkillsHandler(IMapper _mapper, IApplicationDbContext _context) :
             .ProjectTo<GetSkillDTO>(_mapper.ConfigurationProvider)
             .SingleOrDefaultAsync(s => s.Id == request.Id);
         
-        if (res == null) throw new Common.Exceptions.NotFoundException($"No existe el registro {request.Id}");
+        if (res == null) throw new Common.Exceptions.ApiNotFoundException($"No existe el registro {request.Id}");
 
         return res;
             
