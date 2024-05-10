@@ -2,6 +2,8 @@ using ca.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+Console.WriteLine("Enviroment:" + builder.Environment.EnvironmentName);
+
 // Add services to the container.
 builder.Services.AddKeyVaultIfConfigured(builder.Configuration);
 

@@ -37,7 +37,6 @@ public static class DependencyInjection
             configure.Title = "ca API";
 
             // Add JWT
-            
             configure.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
             {
                 Type = OpenApiSecuritySchemeType.ApiKey,
