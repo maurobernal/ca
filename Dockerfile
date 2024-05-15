@@ -1,3 +1,15 @@
+##########################################
+#Build
+FROM maurobernal/net8-build AS build
+
+##Pass Solution
+WORKDIR /
+COPY . .
+
+WORKDIR /src/
+RUN dotnet build Web/Web.csproj -c Release -o /app/build
+
+##########################################
 #Runtime
 FROM maurobernal/net8-base as base
 USER root
@@ -12,15 +24,7 @@ ENV ASPNETCORE_Kestrel__Certificates__Default__Password=Pass2024!
 WORKDIR /root/
 COPY https .aspnet/https/
 
-#Build
-FROM maurobernal/net8-build AS build
 
-##Pass Solution
-WORKDIR /
-COPY . .
-
-WORKDIR /src/
-RUN dotnet build Web/Web.csproj -c Release -o /app/build
 
 
 ##########################################
