@@ -25,8 +25,6 @@ WORKDIR /root/
 COPY https .aspnet/https/
 
 
-
-
 ##########################################
 FROM build as publish
 USER root
