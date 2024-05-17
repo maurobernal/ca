@@ -357,6 +357,19 @@
         ]
       }
     },
+    "/api/Test": {
+      "get": {
+        "tags": [
+          "Test"
+        ],
+        "operationId": "GetHostName",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/api/TodoItems": {
       "get": {
         "tags": [
