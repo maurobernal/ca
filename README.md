@@ -56,3 +56,7 @@ dotnet test
 
 ## Help
 To learn more about the template go to the [project website](https://github.com/jasontaylordev/CleanArchitecture). Here you can find additional guidance, request new features, report a bug, and discuss the template with other users.
+
+
+## Images
+docker run --name seq -d --restart unless-stopped -e ACCEPT_EULA=Y -p 6001:80 -p 6000:5341 datalust/seq:latest

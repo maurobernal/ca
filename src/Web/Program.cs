@@ -1,6 +1,8 @@
 using ca.Infrastructure.Data;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
 
 Console.WriteLine("Enviroment:" + builder.Environment.EnvironmentName);
 
@@ -10,6 +12,26 @@ builder.Services.AddKeyVaultIfConfigured(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddWebServices();
+
+
+//Logger with Serilog
+var serverSeq = configuration.GetConnectionString("Seq")??string.Empty;
+builder.Host.UseSerilog((context, configurator) =>
+configurator
+                 // added new properties
+                .Enrich.WithMachineName()
+                .Enrich.WithThreadName()
+                .Enrich.WithThreadId()
+                .Enrich.FromLogContext()
+                .Enrich.WithProperty("service","ca-api")
+
+                // destiny
+                .WriteTo.File(@"/logs/events.txt", rollingInterval: RollingInterval.Day)
+                .WriteTo.Console()
+                .WriteTo.Seq(serverSeq)
+
+);
+
 
 var app = builder.Build();
 

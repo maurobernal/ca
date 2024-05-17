@@ -24,6 +24,14 @@
     </PackageReference>
     
     <PackageReference Include="FluentValidation.AspNetCore" />
+    
+    <PackageReference Include="Serilog.AspNetCore" />
+    
+    <PackageReference Include="Serilog.Enrichers.Environment" />
+    
+    <PackageReference Include="Serilog.Enrichers.Thread" />
+    
+    <PackageReference Include="Serilog.Sinks.Seq" />
   </ItemGroup>
 
   <ItemGroup>
