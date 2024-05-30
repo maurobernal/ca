@@ -1,29 +1,31 @@
+using ca.Infrastructure;
 using ca.Infrastructure.Data;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
-
 Console.WriteLine("Enviroment:" + builder.Environment.EnvironmentName);
 
 // Add services to the container.
-builder.Services.AddKeyVaultIfConfigured(builder.Configuration);
+
+
+
+builder.Services.AddHashiVaultServices(builder.Configuration);
 
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddWebServices();
 
-
 //Logger with Serilog
-var serverSeq = configuration.GetConnectionString("Seq")??string.Empty;
+var serverSeq = configuration.GetConnectionString("Seq") ?? string.Empty;
 builder.Host.UseSerilog((context, configurator) =>
 configurator
-                 // added new properties
+                // added new properties
                 .Enrich.WithMachineName()
                 .Enrich.WithThreadName()
                 .Enrich.WithThreadId()
                 .Enrich.FromLogContext()
-                .Enrich.WithProperty("service","ca-api")
+                .Enrich.WithProperty("service", "ca-api")
 
                 // destiny
                 .WriteTo.File(@"/logs/events.txt", rollingInterval: RollingInterval.Day)
@@ -45,10 +47,10 @@ else
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-if(bool.Parse(builder?.Configuration["Settings:ApplyMigrations"]?? "false"))
+if (bool.Parse(builder.Configuration["Settings:ApplyMigrations"] ?? "false"))
     await app.ApplyMigrations();
 
-if (bool.Parse(builder?.Configuration["Settings:ApplySeeds"] ?? "false"))
+if (bool.Parse(builder.Configuration["Settings:ApplySeeds"] ?? "false"))
     await app.LoadSeeds();
 
 

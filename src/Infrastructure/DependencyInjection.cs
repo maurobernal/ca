@@ -1,20 +1,32 @@
-﻿using ca.Application.Common.Interfaces;
+﻿using System;
+using ca.Application.Common.Interfaces;
 using ca.Domain.Constants;
+using ca.Infrastructure;
 using ca.Infrastructure.Data;
 using ca.Infrastructure.Data.Interceptors;
+using ca.Infrastructure.HashicorpVault;
 using ca.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
+using Vault;
+using Vault.Client;
+
 
 namespace Microsoft.Extensions.DependencyInjection;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddInfrastructureServices(
+        this IServiceCollection services,
+        IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+        var sp = services.BuildServiceProvider();
+        var vaultClient = sp.GetRequiredService<VaultClient>();
+        var connectionString = vaultClient.GetMsSQLServer("Motor1");
+
 
         Guard.Against.Null(connectionString, message: "Connection string 'DefaultConnection' not found.");
 
@@ -48,6 +60,8 @@ public static class DependencyInjection
 
         services.AddAuthorization(options =>
             options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator)));
+
+
 
         return services;
     }

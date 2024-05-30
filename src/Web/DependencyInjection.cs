@@ -1,10 +1,11 @@
-﻿using Azure.Identity;
-using ca.Application.Common.Interfaces;
+﻿using ca.Application.Common.Interfaces;
 using ca.Infrastructure.Data;
 using ca.Web.Services;
 using Microsoft.AspNetCore.Mvc;
 using NSwag;
 using NSwag.Generation.Processors.Security;
+using Vault.Client;
+using Vault;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -31,7 +32,7 @@ public static class DependencyInjection
 
         services.AddEndpointsApiExplorer();
 
-        
+
         services.AddOpenApiDocument((configure, sp) =>
         {
             configure.Title = "ca API";
@@ -44,24 +45,28 @@ public static class DependencyInjection
                 In = OpenApiSecurityApiKeyLocation.Header,
                 Description = "Type into the textbox: Bearer {your JWT token}."
             });
-            
+
 
             configure.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
         });
-        
+
         return services;
     }
 
-    public static IServiceCollection AddKeyVaultIfConfigured(this IServiceCollection services, ConfigurationManager configuration)
+    public static IServiceCollection AddHashiVaultServices(this IServiceCollection services, ConfigurationManager configuration)
     {
-        var keyVaultUri = configuration["KeyVaultUri"];
-        if (!string.IsNullOrWhiteSpace(keyVaultUri))
+        services.AddSingleton((serviceProvider) =>
         {
-            configuration.AddAzureKeyVault(
-                new Uri(keyVaultUri),
-                new DefaultAzureCredential());
-        }
+            //Vault
+            VaultConfiguration configVault = new VaultConfiguration(configuration.GetConnectionString("Vault"));
+            VaultClient vaultClient = new VaultClient(configVault);
+            vaultClient.SetToken("00000000-0000-0000-0000-000000000000");
+            return vaultClient;
+        });
 
         return services;
+
     }
+
+
 }
