@@ -12,16 +12,8 @@ public class UpdateSkillComands: IRequest<int>
 
 
 
-public class UpdateSkillHandler : IRequestHandler<UpdateSkillComands, int>
+public class UpdateSkillHandler( IApplicationDbContext _context, ICacheService _cache) : IRequestHandler<UpdateSkillComands, int>
 {
-    private readonly IApplicationDbContext _context;
-    private readonly IMapper _mapper;
-
-    public UpdateSkillHandler(IMapper mapper, IApplicationDbContext context)
-    {
-        _context = context;
-        _mapper = mapper;
-    }
     public async Task<int> Handle(UpdateSkillComands request, CancellationToken cancellationToken)
     {      
         var entity =  await _context.Skills.FirstOrDefaultAsync(s => s.Id == request.Id);
@@ -29,6 +21,7 @@ public class UpdateSkillHandler : IRequestHandler<UpdateSkillComands, int>
 
         entity.Title = request.Title;
         await _context.SaveChangesAsync(cancellationToken);
+        await _cache.SetDataAsync($"skill:{entity.Id}", entity);
 
         return entity.Id; 
     }

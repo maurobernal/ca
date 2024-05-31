@@ -9,21 +9,19 @@ public class DeleteSkillsComands : IRequest<int>
 }
 
 
-public class DeleteSkillsHandler : IRequestHandler<DeleteSkillsComands, int>
+public class DeleteSkillsHandler(IApplicationDbContext _context, ICacheService _cache) : IRequestHandler<DeleteSkillsComands, int>
 {
-    private readonly IApplicationDbContext _context;
-
-    public DeleteSkillsHandler(IApplicationDbContext context) => _context = context;
-    
     public async Task<int> Handle(DeleteSkillsComands request, CancellationToken cancellationToken)
     {
-        var ent= await _context.Skills.AsNoTracking()
+        var entity= await _context.Skills.AsNoTracking()
             .FirstOrDefaultAsync(f => f.Id == request.Id);
 
-        if (ent == null) throw new Common.Exceptions.ApiNotFoundException($"La entidad no existe. Id:{request.Id}");
+        if (entity == null) throw new Common.Exceptions.ApiNotFoundException($"La entidad no existe. Id:{request.Id}");
 
-        var res= _context.Skills.Remove(ent);
+        var res= _context.Skills.Remove(entity);
         await _context.SaveChangesAsync(cancellationToken);
+        await _cache.RemoveDataAsync($"skill:{entity.Id}");
+
         return request.Id;
     }
 }

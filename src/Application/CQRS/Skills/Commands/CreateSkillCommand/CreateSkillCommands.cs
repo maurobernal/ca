@@ -17,18 +17,16 @@ public class CreateSkillCommands : IRequest<int>
 
 
 
-public class CreateSkillHandler : IRequestHandler<CreateSkillCommands, int>
+public class CreateSkillHandler(IApplicationDbContext _context, ICacheService _cache) : IRequestHandler<CreateSkillCommands, int>
 {
-    private readonly IApplicationDbContext _context;
-
-    public CreateSkillHandler(IApplicationDbContext context) => _context = context;
-        
     public async Task<int> Handle(CreateSkillCommands request, CancellationToken cancellationToken)
     {
         var entity = new Skill();
         entity.Title = request.Title;
         _context.Skills.Add(entity);
         await _context.SaveChangesAsync(cancellationToken);
+        await _cache.SetDataAsync($"skill:{entity.Id}", entity);
+
         return entity.Id;
     }
 }
