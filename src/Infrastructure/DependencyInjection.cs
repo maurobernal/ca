@@ -2,11 +2,13 @@
 using ca.Domain.Constants;
 using ca.Infrastructure.Data;
 using ca.Infrastructure.Data.Interceptors;
+using ca.Infrastructure.HashiCorp;
 using ca.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
+using Vault;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -14,7 +16,14 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+
+        var sp = services.BuildServiceProvider();
+        var vaultClient = sp.GetRequiredService<VaultClient>();
+
+        Console.WriteLine(vaultClient.GetConnectionsKeys());
+
+        var connectionString = vaultClient.GetConnectionString("Motor1");
 
         Guard.Against.Null(connectionString, message: "Connection string 'DefaultConnection' not found.");
 

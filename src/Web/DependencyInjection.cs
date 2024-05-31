@@ -5,6 +5,8 @@ using ca.Web.Services;
 using Microsoft.AspNetCore.Mvc;
 using NSwag;
 using NSwag.Generation.Processors.Security;
+using Vault;
+using Vault.Client;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -52,15 +54,18 @@ public static class DependencyInjection
         return services;
     }
 
-    public static IServiceCollection AddKeyVaultIfConfigured(this IServiceCollection services, ConfigurationManager configuration)
+    public static IServiceCollection AddVault(this IServiceCollection services, ConfigurationManager configuration)
     {
-        var keyVaultUri = configuration["KeyVaultUri"];
-        if (!string.IsNullOrWhiteSpace(keyVaultUri))
+        services.AddSingleton((ServiceProvider) => 
         {
-            configuration.AddAzureKeyVault(
-                new Uri(keyVaultUri),
-                new DefaultAzureCredential());
-        }
+
+            string address = configuration.GetConnectionString("Vault")?? string.Empty;
+            VaultConfiguration config = new(address);
+            VaultClient client = new VaultClient(config);
+            client.SetToken("myroot");
+            return client;        
+        });
+
 
         return services;
     }

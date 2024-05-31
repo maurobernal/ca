@@ -7,7 +7,7 @@ var configuration = builder.Configuration;
 Console.WriteLine("Enviroment:" + builder.Environment.EnvironmentName);
 
 // Add services to the container.
-builder.Services.AddKeyVaultIfConfigured(builder.Configuration);
+builder.Services.AddVault(builder.Configuration);
 
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
