@@ -58,7 +58,7 @@ dotnet test
 To learn more about the template go to the [project website](https://github.com/jasontaylordev/CleanArchitecture). Here you can find additional guidance, request new features, report a bug, and discuss the template with other users.
 
 
-<<<<<<< HEAD
+
 ## Images
 docker run --name seq -d --restart unless-stopped -e ACCEPT_EULA=Y -p 6001:80 -p 6000:5341 datalust/seq:latest
 =======
@@ -71,4 +71,7 @@ sudo docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=Pass2024" \
    -p 14331:1433 --name sql1 --hostname sql1 \
    -d \
    mcr.microsoft.com/mssql/server:2022-latest
->>>>>>> main
+
+
+# Infisical
+https://github.com/Infisical/infisical/blob/main/.env.example

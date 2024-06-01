@@ -6,8 +6,12 @@ var configuration = builder.Configuration;
 
 Console.WriteLine("Enviroment:" + builder.Environment.EnvironmentName);
 
-// Add services to the container.
+// Add Vaults providers
 builder.Services.AddVault(builder.Configuration);
+builder.Services.AddInfisical(configuration);
+
+
+// Add services to the container.
 
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);

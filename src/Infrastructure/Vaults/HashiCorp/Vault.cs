@@ -2,7 +2,7 @@
 using Vault.Client;
 using Vault.Model;
 
-namespace ca.Infrastructure.HashiCorp;
+namespace ca.Infrastructure.Vaults.HashiCorp;
 public static class Vault
 {
 
@@ -18,7 +18,7 @@ public static class Vault
     {
         var resp = vaultClient.Secrets.DatabaseReadConnectionConfiguration(name).Data.ToString() ?? string.Empty;
         var model = System.Text.Json.JsonSerializer.Deserialize<EngineModels>(resp) ?? new();
-        return  System.Web.HttpUtility.UrlDecode(model.connection_details.connection_url);
+        return System.Web.HttpUtility.UrlDecode(model.connection_details.connection_url);
     }
 
 

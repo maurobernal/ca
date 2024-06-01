@@ -2,8 +2,10 @@
 using ca.Domain.Constants;
 using ca.Infrastructure.Data;
 using ca.Infrastructure.Data.Interceptors;
-using ca.Infrastructure.HashiCorp;
 using ca.Infrastructure.Identity;
+using ca.Infrastructure.Vaults.HashiCorp;
+using ca.Infrastructure.Vaults.Infisical;
+using Infisical.Sdk;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -20,6 +22,13 @@ public static class DependencyInjection
 
         var sp = services.BuildServiceProvider();
         var vaultClient = sp.GetRequiredService<VaultClient>();
+        var vaultInfisical = sp.GetRequiredService<InfisicalClient>();
+
+        var webui_host = vaultInfisical.GetSecrets("WEBUI_HOST");
+        var webui_user = vaultInfisical.GetSecrets("WEBUI_USER");
+        Console.WriteLine($"host:{webui_host}  user:{webui_user}");
+
+        Console.WriteLine($"{vaultInfisical.GetListSecret()}");
 
         Console.WriteLine(vaultClient.GetConnectionsKeys());
 
