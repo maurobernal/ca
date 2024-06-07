@@ -1,6 +1,8 @@
 ﻿using Azure.Identity;
 using ca.Application.Common.Interfaces;
 using ca.Infrastructure.Data;
+using ca.Infrastructure.Vaults.HashiCorp;
+using ca.Infrastructure.Vaults.Infisical;
 using ca.Web.Services;
 using Infisical.Sdk;
 using Microsoft.AspNetCore.Mvc;
@@ -59,15 +61,11 @@ public static class DependencyInjection
     {
         services.AddSingleton((ServiceProvider) => 
         {
-
             string address = configuration.GetConnectionString("Vault")?? string.Empty;
-            VaultConfiguration config = new(address);
-            VaultClient client = new VaultClient(config);
-            client.SetToken("myroot");
+            string token = "myroot";
+            VaultCustom client = new  VaultCustom(address, token);          
             return client;        
         });
-
-
         return services;
     }
 
@@ -77,16 +75,10 @@ public static class DependencyInjection
         {
 
             string address = configuration.GetConnectionString("Infisical") ?? string.Empty;
-            string token = "st.40ae2c1b-ccb2-408d-b48a-330e04569937.56f81852cc96c0e34fc8961b32c0c823.7a111e48e722bd3164d2588cdf710bde" ?? string.Empty;
-            var settings = new ClientSettings();
-            settings.AccessToken = token;
-            settings.SiteUrl = address;
-            var cliente = new InfisicalClient(settings);
-
+            string token = "st.cfcd5319-d26f-4f98-9804-b5f1559eec7a.03718c2fc787296a8ee3e37366fddf29.309667a20fd1d1134d249d52dbde797e" ?? string.Empty;
+            var cliente = new InfisicalCustom(address, token, "dev");
             return cliente;
         });
-
-
         return services;
     }
 }

@@ -75,3 +75,6 @@ sudo docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=Pass2024" \
 
 # Infisical
 https://github.com/Infisical/infisical/blob/main/.env.example
+
+#Vault
+docker run --cap-add=IPC_LOCK -e 'VAULT_DEV_ROOT_TOKEN_ID=myroot' -e 'VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200' -p 18200:8200 -d hashicorp/vault 

@@ -21,18 +21,18 @@ public static class DependencyInjection
 
 
         var sp = services.BuildServiceProvider();
-        var vaultClient = sp.GetRequiredService<VaultClient>();
-        var vaultInfisical = sp.GetRequiredService<InfisicalClient>();
+        var vaultClient = sp.GetRequiredService<VaultCustom>();
+        var vaultInfisical = sp.GetRequiredService<InfisicalCustom>();
 
-        var webui_host = vaultInfisical.GetSecrets("WEBUI_HOST");
-        var webui_user = vaultInfisical.GetSecrets("WEBUI_USER");
+        var webui_host = vaultInfisical.GetKey("WEBUI_HOST");
+        var webui_user = vaultInfisical.GetKey  ("WEBUI_USER");
         Console.WriteLine($"host:{webui_host}  user:{webui_user}");
 
-        Console.WriteLine($"{vaultInfisical.GetListSecret()}");
+        Console.WriteLine($"{vaultInfisical.GetConnectionsKeys()}");
 
         Console.WriteLine(vaultClient.GetConnectionsKeys());
 
-        var connectionString = vaultClient.GetConnectionString("Motor1");
+        var connectionString = vaultClient.GetKey("Motor1");
 
         Guard.Against.Null(connectionString, message: "Connection string 'DefaultConnection' not found.");
 
@@ -66,6 +66,19 @@ public static class DependencyInjection
 
         services.AddAuthorization(options =>
             options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator)));
+
+        var config = configuration.GetSection("Config:Vault").Value ?? string.Empty;
+        if (config == "Hashicorp")
+        {
+            services.AddSingleton<IVault>((sp) => sp.GetRequiredService<VaultCustom>());
+        }
+        else
+        {
+            services.AddSingleton<IVault>((sp) => sp.GetRequiredService<InfisicalCustom>());
+        }
+        
+
+        
 
         return services;
     }

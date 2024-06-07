@@ -10,10 +10,12 @@ public class GetStudentQueries : IRequest<GetStudentDto>
 }
 
 
-public class GetStudentQueriesHandler(IApplicationDbContext _context, IMapper _mapper) : IRequestHandler<GetStudentQueries, GetStudentDto>
+public class GetStudentQueriesHandler(IApplicationDbContext _context, IMapper _mapper, IVault _vault) : IRequestHandler<GetStudentQueries, GetStudentDto>
 {
     public async Task<GetStudentDto> Handle(GetStudentQueries request, CancellationToken cancellationToken)
     {
+
+        var res = _vault.GetKey("Motor1");
         var entity = await _context.Students
             .AsNoTracking()
             .Include(c => c.Courses)
